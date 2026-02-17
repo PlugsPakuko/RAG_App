@@ -3,6 +3,10 @@ from pydantic import BaseModel
 import chromadb
 import requests
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="RAG Application", description="Query personal information using RAG")
 
@@ -10,7 +14,7 @@ app = FastAPI(title="RAG Application", description="Query personal information u
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection(name="personal_info")
 OLLAMA_API_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "minimax-m2.5:cloud"  # Change this to your preferred model
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL") 
 
 class QueryRequest(BaseModel):
     query: str
